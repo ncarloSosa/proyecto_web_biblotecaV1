@@ -1,0 +1,79 @@
+"""DAO helpers for HISTORIAL with metadata-driven column discovery."""
+
+from __future__ import annotations
+
+from typing import Dict, List
+
+from .db import (
+    any_column_like,
+    find_fk_to,
+    first_existing_column,
+    query_all,
+)
+
+
+def _pk_hist() -> str:
+    try:
+        return first_existing_column("HISTORIAL", ["ID_HISTORIAL", "ID_HIST", "ID"])
+    except RuntimeError:
+        return "ROWID"
+
+
+def _libro_fk() -> str:
+    fk = find_fk_to("HISTORIAL", "LIBRO")
+    if fk:
+        return fk
+    return any_column_like("HISTORIAL", ["LIBRO", "ID_LIB", "LIB"])
+
+
+def _usuario_fk() -> str | None:
+    fk = find_fk_to("HISTORIAL", "USUARIO")
+    if fk:
+        return fk
+    for table in ("MIEMBRO", "CLIENTE"):
+        fk = find_fk_to("HISTORIAL", table)
+        if fk:
+            return fk
+    return any_column_like(
+        "HISTORIAL",
+        ["USUARIO", "ID_US", "MIEMBRO", "CLIENTE", "ID_CLI"],
+    )
+
+
+def listar() -> List[Dict[str, object]]:
+    table = "HISTORIAL"
+    pk = _pk_hist()
+    libro_fk = _libro_fk()
+    if not libro_fk:
+        libro_fk = first_existing_column(table, ["LIBRO_ID_LIBRO", "ID_LIBRO", "LIBRO"])
+
+    usuario_fk = _usuario_fk()
+    usuario_sel = f"{usuario_fk} AS USUARIO_ID" if usuario_fk else "NULL AS USUARIO_ID"
+
+    accion_col = None
+    for candidate in [
+        "ACCION",
+        "ACCION_REALIZADA",
+        "EVENTO",
+        "OPERACION",
+        "DESCRIPCION",
+        "DETALLE",
+    ]:
+        try:
+            accion_col = first_existing_column(table, [candidate])
+            break
+        except RuntimeError:
+            continue
+
+    fecha_col = any_column_like(table, ["FECHA", "FEC", "CREA"])
+
+    sql = f"""
+        SELECT {pk} AS ID,
+               {libro_fk} AS LIBRO_ID,
+               {usuario_sel},
+               {accion_col or 'NULL'} AS ACCION,
+               {fecha_col or 'NULL'} AS FECHA_EVENTO
+          FROM {table}
+         ORDER BY ID DESC
+    """
+    return query_all(sql)

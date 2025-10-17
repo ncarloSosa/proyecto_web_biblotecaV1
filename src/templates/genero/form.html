@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar género' if genero else 'Nuevo género' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="genero">Nombre del género</label>
+    <input type="text" class="form-control" id="genero" name="GENERO" required value="{{ genero['GENERO'] if genero else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="libro">Libro asociado</label>
+    <select class="form-select" id="libro" name="LIBRO_ID_LIBRO" required>
+      <option value="">-- Selecciona un libro --</option>
+      {% for libro in libros %}
+        <option value="{{ libro['ID_LIBRO'] }}" {% if genero and genero['LIBRO_ID_LIBRO'] == libro['ID_LIBRO'] %}selected{% endif %}>{{ libro['ID_LIBRO'] }} - {{ libro['TITULO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('genero.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

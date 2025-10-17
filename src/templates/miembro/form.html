@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar miembro' if registro else 'Nuevo miembro' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="usuario">Usuario</label>
+    <select class="form-select" id="usuario" name="ID_USUARIO" required>
+      <option value="">-- Selecciona --</option>
+      {% for usuario in usuarios %}
+        <option value="{{ usuario['ID_USUARIO'] }}" {% if registro and registro['ID_USUARIO'] == usuario['ID_USUARIO'] %}selected{% endif %}>{{ usuario['ID_USUARIO'] }} - {{ usuario['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="grupo">Grupo</label>
+    <select class="form-select" id="grupo" name="ID_GRUPO" required>
+      <option value="">-- Selecciona --</option>
+      {% for grupo in grupos %}
+        <option value="{{ grupo['ID_GRUPO'] }}" {% if registro and registro['ID_GRUPO'] == grupo['ID_GRUPO'] %}selected{% endif %}>{{ grupo['ID_GRUPO'] }} - {{ grupo['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('miembro.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
