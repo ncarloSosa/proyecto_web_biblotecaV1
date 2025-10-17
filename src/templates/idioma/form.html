@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar idioma' if idioma else 'Nuevo idioma' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="lengua">Nombre del idioma</label>
+    <input type="text" class="form-control" id="lengua" name="LENGUA" required value="{{ idioma['LENGUA'] if idioma else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('idioma.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

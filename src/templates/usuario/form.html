@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar usuario' if usuario else 'Nuevo usuario' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="NOMBRE" required value="{{ usuario['NOMBRE'] if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="rol">Rol</label>
+    <input type="text" class="form-control" id="rol" name="ROL" required value="{{ usuario['ROL'] if usuario else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fecha_registro">Fecha de registro</label>
+    <input type="date" class="form-control" id="fecha_registro" name="FECHA_REGISTRO" required value="{{ usuario['FECHA_REGISTRO']|default('', true)|string[:10] if usuario else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('usuario.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
