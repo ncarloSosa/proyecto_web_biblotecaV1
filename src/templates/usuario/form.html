@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar usuario' if usuario else 'Nuevo usuario' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="usuario">Usuario</label>
+    <input type="text" class="form-control" id="usuario" name="usuario" required value="{{ usuario.get('USUARIO') if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="nombre">Nombre completo</label>
+    <input type="text" class="form-control" id="nombre" name="nombre" required value="{{ usuario.get('NOMBRE') if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="direccion">Dirección</label>
+    <input type="text" class="form-control" id="direccion" name="direccion" required value="{{ usuario.get('DIRECCION') if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="telefono">Teléfono</label>
+    <input type="text" class="form-control" id="telefono" name="telefono" required value="{{ usuario.get('TELEFONO') if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="dpi">DPI</label>
+    <input type="text" class="form-control" id="dpi" name="dpi" required value="{{ usuario.get('DPI') if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="sexo">Sexo</label>
+    <select class="form-select" id="sexo" name="sexo" required>
+      {% set valor = usuario.get('SEXO') if usuario else '' %}
+      <option value="">-- Selecciona --</option>
+      <option value="M" {% if valor == 'M' %}selected{% endif %}>Masculino</option>
+      <option value="F" {% if valor == 'F' %}selected{% endif %}>Femenino</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="fecha_creacion">Fecha de creación</label>
+    <input type="date" class="form-control" id="fecha_creacion" name="fecha_creacion" required value="{{ usuario.get('FECHA_CREACION')|shortdate if usuario else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="contrasena">Contraseña</label>
+    <input type="password" class="form-control" id="contrasena" name="contrasena" required value="{{ usuario.get('CONTRASENA') if usuario else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('usuario.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
