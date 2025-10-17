@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Libros</h1>
+  <a href="{{ url_for('libro.crear') }}" class="btn btn-primary">Nuevo libro</a>
+</div>
+<form class="row g-2 mb-3" method="get">
+  <div class="col-sm-4">
+    <input type="text" class="form-control" name="q" placeholder="Buscar por título" value="{{ request.args.get('q', '') }}">
+  </div>
+  <div class="col-sm-2">
+    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+  </div>
+</form>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>ISBN</th>
+        <th>Clasificación</th>
+        <th>Estado físico</th>
+        <th>Fecha registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for libro in libros %}
+        <tr>
+          <td>{{ libro['ID_LIBRO'] }}</td>
+          <td>{{ libro['TITULO'] }}</td>
+          <td>{{ libro['ISBN'] }}</td>
+          <td>{{ libro['CLASIFICACION'] }}</td>
+          <td>{{ libro['ESTADO_FISICO'] }}</td>
+          <td>{{ libro.get('FECHA_REGISTRO')|shortdate }}</td>
+          <td>
+            <a href="{{ url_for('libro.editar', id_libro=libro['ID_LIBRO']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <form action="{{ url_for('libro.eliminar', id_libro=libro['ID_LIBRO']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar libro?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="text-center">No hay registros.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<nav>
+  <ul class="pagination">
+    {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('libro.index', page=p, q=request.args.get('q')) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endblock %}

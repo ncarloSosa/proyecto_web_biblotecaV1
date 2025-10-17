@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar movimiento' if registro else 'Nuevo movimiento' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-4">
+    <label class="form-label" for="tip_mov">Tipo de movimiento</label>
+    <input type="text" class="form-control" id="tip_mov" name="TIP_MOV" required value="{{ registro['TIP_MOV'] if registro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fecha">Fecha</label>
+    <input type="date" class="form-control" id="fecha" name="FECHA" required value="{{ registro.get('FECHA')|date10 if registro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="usuario">Usuario</label>
+    <select class="form-select" id="usuario" name="USUARIO_ID_USUARIO" required>
+      <option value="">-- Selecciona --</option>
+      {% for usuario in usuarios %}
+        <option value="{{ usuario['ID_USUARIO'] }}" {% if registro and registro['USUARIO_ID_USUARIO'] == usuario['ID_USUARIO'] %}selected{% endif %}>{{ usuario['ID_USUARIO'] }} - {{ usuario['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="libro">Libro</label>
+    <select class="form-select" id="libro" name="LIBRO_ID_LIBRO" required>
+      <option value="">-- Selecciona --</option>
+      {% for libro in libros %}
+        <option value="{{ libro['ID_LIBRO'] }}" {% if registro and registro['LIBRO_ID_LIBRO'] == libro['ID_LIBRO'] %}selected{% endif %}>{{ libro['ID_LIBRO'] }} - {{ libro['TITULO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('historial.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
