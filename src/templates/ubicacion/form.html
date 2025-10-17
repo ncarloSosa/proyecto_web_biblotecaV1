@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar ubicación' if registro else 'Nueva ubicación' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="estanteria">Estantería</label>
+    <input type="text" class="form-control" id="estanteria" name="ESTANTERIA" required value="{{ registro['ESTANTERIA'] if registro else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="descripcion">Descripción</label>
+    <input type="text" class="form-control" id="descripcion" name="DESCRIPCION" value="{{ registro.get('DESCRIPCION') if registro else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('ubicacion.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

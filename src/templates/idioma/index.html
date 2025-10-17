@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3">Editoriales</h1>
-  <a href="{{ url_for('editorial.crear') }}" class="btn btn-primary">Nueva editorial</a>
+  <h1 class="h3">Idiomas</h1>
+  <a href="{{ url_for('idioma.crear') }}" class="btn btn-primary">Nuevo idioma</a>
 </div>
 <form class="row g-2 mb-3" method="get">
   <div class="col-sm-4">
@@ -17,26 +17,24 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Nombre</th>
-        <th>País</th>
+        <th>Lengua</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      {% for editorial in editoriales %}
+      {% for idioma in idiomas %}
         <tr>
-          <td>{{ editorial['EDITORIAL_ID'] }}</td>
-          <td>{{ editorial['NOMBRE'] }}</td>
-          <td>{{ editorial['PAIS'] }}</td>
+          <td>{{ idioma['ID_IDIOMA'] }}</td>
+          <td>{{ idioma.get('IDIOMA_LIBRO') or '' }}</td>
           <td>
-            <a href="{{ url_for('editorial.editar', id_editorial=editorial['EDITORIAL_ID']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
-            <form action="{{ url_for('editorial.eliminar', id_editorial=editorial['EDITORIAL_ID']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar editorial?');">
+            <a href="{{ url_for('idioma.editar', id_idioma=idioma['ID_IDIOMA']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <form action="{{ url_for('idioma.eliminar', id_idioma=idioma['ID_IDIOMA']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar idioma?');">
               <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
             </form>
           </td>
         </tr>
       {% else %}
-        <tr><td colspan="4" class="text-center">No hay registros.</td></tr>
+        <tr><td colspan="3" class="text-center">No hay registros.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -44,7 +42,7 @@
 <nav>
   <ul class="pagination">
     {% for p in range(1, total_pages + 1) %}
-      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('editorial.index', page=p, q=request.args.get('q')) }}">{{ p }}</a></li>
+      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('idioma.index', page=p, q=request.args.get('q')) }}">{{ p }}</a></li>
     {% endfor %}
   </ul>
 </nav>
