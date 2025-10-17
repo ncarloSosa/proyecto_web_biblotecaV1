@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar editorial' if editorial else 'Nueva editorial' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="NOMBRE" required value="{{ editorial['NOMBRE'] if editorial else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="pais">País</label>
+    <input type="text" class="form-control" id="pais" name="PAIS" value="{{ editorial['PAIS'] if editorial else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('editorial.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

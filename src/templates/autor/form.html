@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar autor' if autor else 'Nuevo autor' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="NOMBRE" required value="{{ autor['NOMBRE'] if autor else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="apellido">Apellido</label>
+    <input type="text" class="form-control" id="apellido" name="APELLIDO" required value="{{ autor['APELLIDO'] if autor else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fech_nacimient">Fecha de nacimiento</label>
+    <input type="date" class="form-control" id="fech_nacimient" name="FECH_NACIMIENT" value="{{ (autor['FECH_NACIMIENT']|default('', true)|string)[:10] if autor else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="nacionalidad">Nacionalidad</label>
+    <input type="text" class="form-control" id="nacionalidad" name="NACIONALIDAD" value="{{ autor['NACIONALIDAD'] if autor else '' }}">
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="biografia">Biografía</label>
+    <textarea class="form-control" id="biografia" name="BIOGRAFIA" rows="3" maxlength="50">{{ autor['BIOGRAFIA'] if autor else '' }}</textarea>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('autor.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

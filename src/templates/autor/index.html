@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Autores</h1>
+  <a href="{{ url_for('autor.crear') }}" class="btn btn-primary">Nuevo autor</a>
+</div>
+<form class="row g-2 mb-3" method="get">
+  <div class="col-sm-4">
+    <input type="text" class="form-control" name="q" placeholder="Buscar por nombre" value="{{ request.args.get('q', '') }}">
+  </div>
+  <div class="col-sm-2">
+    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+  </div>
+</form>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Fecha nacimiento</th>
+        <th>Nacionalidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for autor in autores %}
+        <tr>
+          <td>{{ autor['ID_AUTOR'] }}</td>
+          <td>{{ autor['NOMBRE'] }}</td>
+          <td>{{ autor['APELLIDO'] }}</td>
+          <td>{{ (autor['FECH_NACIMIENT']|default('', true)|string)[:10] }}</td>
+          <td>{{ autor['NACIONALIDAD'] }}</td>
+          <td>
+            <a href="{{ url_for('autor.editar', id_autor=autor['ID_AUTOR']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <form action="{{ url_for('autor.eliminar', id_autor=autor['ID_AUTOR']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar autor?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center">No hay registros.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<nav>
+  <ul class="pagination">
+    {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('autor.index', page=p, q=request.args.get('q')) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endblock %}
