@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Grupos de lectura</h1>
+  <a href="{{ url_for('grupo_lectura.crear') }}" class="btn btn-primary">Nuevo grupo</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Fecha reunión</th>
+        <th>Hora reunión</th>
+        <th>Lugar</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for grupo in grupos %}
+        <tr>
+          <td>{{ grupo['ID_GRUPO'] }}</td>
+          <td>{{ grupo['NOMBRE'] }}</td>
+          <td>{{ (grupo['FECHA_REUNION']|default('', true)|string)[:10] }}</td>
+          <td>{{ (grupo['HORA_REUNION']|default('', true)|string)[11:16] }}</td>
+          <td>{{ grupo['LUGAR'] }}</td>
+          <td>
+            <a href="{{ url_for('grupo_lectura.editar', id_grupo=grupo['ID_GRUPO']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <form action="{{ url_for('grupo_lectura.eliminar', id_grupo=grupo['ID_GRUPO']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar grupo?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center">No hay registros.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<nav>
+  <ul class="pagination">
+    {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('grupo_lectura.index', page=p) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endblock %}

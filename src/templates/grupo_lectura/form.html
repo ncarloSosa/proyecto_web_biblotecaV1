@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar grupo' if grupo else 'Nuevo grupo de lectura' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="NOMBRE" required value="{{ grupo['NOMBRE'] if grupo else '' }}">
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="descripcion">Descripción</label>
+    <textarea class="form-control" id="descripcion" name="DESCRIPCION" rows="3">{{ grupo['DESCRIPCION'] if grupo else '' }}</textarea>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fecha_reunion">Fecha de reunión</label>
+    <input type="date" class="form-control" id="fecha_reunion" name="FECHA_REUNION" required value="{{ (grupo['FECHA_REUNION']|default('', true)|string)[:10] if grupo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="hora_reunion">Hora de reunión</label>
+    <input type="time" class="form-control" id="hora_reunion" name="HORA_REUNION" required value="{{ (grupo['HORA_REUNION']|default('', true)|string)[11:16] if grupo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="lugar">Lugar</label>
+    <input type="text" class="form-control" id="lugar" name="LUGAR" required value="{{ grupo['LUGAR'] if grupo else '' }}">
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="libros">Libros asignados</label>
+    <select class="form-select" id="libros" name="LIBROS" multiple size="6">
+      {% for libro in libros %}
+        <option value="{{ libro['ID_LIBRO'] }}" {% if libro['ID_LIBRO'] in seleccionados %}selected{% endif %}>{{ libro['ID_LIBRO'] }} - {{ libro['TITULO'] }}</option>
+      {% endfor %}
+    </select>
+    <small class="text-muted">Mantén presionada la tecla Ctrl o Cmd para seleccionar múltiples opciones.</small>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('grupo_lectura.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
