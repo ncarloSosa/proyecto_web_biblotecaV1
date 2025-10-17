@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar préstamo' if prestamo else 'Nuevo préstamo' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-4">
+    <label class="form-label" for="fecha_prestado">Fecha prestado</label>
+    <input type="date" class="form-control" id="fecha_prestado" name="FECHA_PRESTADO" required value="{{ prestamo.get('FECHA_PRESTADO')|shortdate if prestamo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fech_caduc">Fecha caducidad</label>
+    <input type="date" class="form-control" id="fech_caduc" name="FECH_CADUC" value="{{ prestamo.get('FECH_CADUC')|shortdate if prestamo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="estado">Estado</label>
+    <input type="text" class="form-control" id="estado" name="ESTADO" maxlength="20" required value="{{ prestamo['ESTADO'] if prestamo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="estado_fisic">Estado físico</label>
+    <input type="text" class="form-control" id="estado_fisic" name="ESTADO_FISIC" maxlength="20" required value="{{ prestamo['ESTADO_FISIC'] if prestamo else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="libro">Libro</label>
+    <select class="form-select" id="libro" name="ID_LIBRO" required>
+      <option value="">-- Selecciona un libro --</option>
+      {% for libro in libros %}
+        <option value="{{ libro['ID_LIBRO'] }}" {% if prestamo and prestamo['ID_LIBRO'] == libro['ID_LIBRO'] %}selected{% endif %}>{{ libro['ID_LIBRO'] }} - {{ libro['TITULO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="usuario">Usuario</label>
+    <select class="form-select" id="usuario" name="ID_USUARIO" required>
+      <option value="">-- Selecciona un usuario --</option>
+      {% for usuario in usuarios %}
+        <option value="{{ usuario['ID_USUARIO'] }}" {% if prestamo and prestamo['ID_USUARIO'] == usuario['ID_USUARIO'] %}selected{% endif %}>{{ usuario['ID_USUARIO'] }} - {{ usuario['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('prestamo.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}

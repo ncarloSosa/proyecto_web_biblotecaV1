@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar libro' if libro else 'Nuevo libro' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label" for="titulo">Título</label>
+    <input type="text" class="form-control" id="titulo" name="TITULO" maxlength="20" required value="{{ libro['TITULO'] if libro else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="subtitulo">Subtítulo</label>
+    <input type="text" class="form-control" id="subtitulo" name="SUBTITULO" maxlength="20" value="{{ libro['SUBTITULO'] if libro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="isbn">ISBN</label>
+    <input type="text" class="form-control" id="isbn" name="ISBN" maxlength="20" value="{{ libro['ISBN'] if libro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="ano_publicacion">Año publicación</label>
+    <input type="date" class="form-control" id="ano_publicacion" name="ANO_PUBLICACION" value="{{ libro.get('ANO_PUBLICACION')|shortdate if libro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fecha_registro">Fecha registro</label>
+    <input type="date" class="form-control" id="fecha_registro" name="FECHA_REGISTRO" required value="{{ libro.get('FECHA_REGISTRO')|shortdate if libro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="num_copias">Número de copias</label>
+    <input type="number" class="form-control" id="num_copias" name="NUM_COPIAS" value="{{ libro['NUM_COPIAS'] if libro else '' }}" min="0">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="num_paginas">Número de páginas</label>
+    <input type="number" class="form-control" id="num_paginas" name="NUM_PAGINAS" value="{{ libro['NUM_PAGINAS'] if libro else '' }}" min="0">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="pertenece_grupo">Pertenece a grupo</label>
+    <select class="form-select" id="pertenece_grupo" name="PERTENECE_GRUPO">
+      {% set actual = libro['PERTENECE_GRUPO'] if libro else 'N' %}
+      <option value="N" {% if actual == 'N' %}selected{% endif %}>No</option>
+      <option value="S" {% if actual == 'S' %}selected{% endif %}>Sí</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="descripcion">Descripción</label>
+    <textarea class="form-control" id="descripcion" name="DESCRIPCION" rows="3" maxlength="200">{{ libro['DESCRIPCION'] if libro else '' }}</textarea>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="clasificacion">Clasificación</label>
+    <input type="text" class="form-control" id="clasificacion" name="CLASIFICACION" maxlength="20" required value="{{ libro['CLASIFICACION'] if libro else '' }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="estado_fisico">Estado físico</label>
+    <input type="text" class="form-control" id="estado_fisico" name="ESTADO_FISICO" maxlength="20" required value="{{ libro['ESTADO_FISICO'] if libro else '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="editorial">Editorial</label>
+    <select class="form-select" id="editorial" name="ID_VAREDIT">
+      <option value="">-- Sin asignar --</option>
+      {% for editorial in editoriales %}
+        <option value="{{ editorial['ID_EDITORIAL'] }}" {% if libro and libro['ID_VAREDIT'] == editorial['ID_EDITORIAL'] %}selected{% endif %}>{{ editorial['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="genero">Género</label>
+    <select class="form-select" id="genero" name="ID_GENERO">
+      <option value="">-- Sin asignar --</option>
+      {% for genero in generos %}
+        <option value="{{ genero['ID_GENERO'] }}" {% if libro and libro['ID_GENERO'] == genero['ID_GENERO'] %}selected{% endif %}>{{ genero['GENERO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="idioma">Idioma principal</label>
+    <select class="form-select" id="idioma" name="ID_IDIOMA">
+      <option value="">-- Sin asignar --</option>
+      {% for idioma in idiomas %}
+        <option value="{{ idioma['ID_IDIOMA'] }}" {% if libro and libro['ID_IDIOMA'] == idioma['ID_IDIOMA'] %}selected{% endif %}>{{ idioma['IDIOMA_LIBRO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="idioma_secundario">Idioma secundario</label>
+    <select class="form-select" id="idioma_secundario" name="IDIOMA_ID_IDIOMA">
+      <option value="">-- Sin asignar --</option>
+      {% for idioma in idiomas %}
+        <option value="{{ idioma['ID_IDIOMA'] }}" {% if libro and libro['IDIOMA_ID_IDIOMA'] == idioma['ID_IDIOMA'] %}selected{% endif %}>{{ idioma['IDIOMA_LIBRO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="prestamo">Préstamo asociado</label>
+    <select class="form-select" id="prestamo" name="PRESTAMO_ID_PRESTAMO">
+      <option value="">-- Sin asignar --</option>
+      {% for prestamo in prestamos %}
+        <option value="{{ prestamo['ID_PRESTAMO'] }}" {% if libro and libro['PRESTAMO_ID_PRESTAMO'] == prestamo['ID_PRESTAMO'] %}selected{% endif %}>{{ prestamo['ID_PRESTAMO'] }} - {{ prestamo['ESTADO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('libro.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
