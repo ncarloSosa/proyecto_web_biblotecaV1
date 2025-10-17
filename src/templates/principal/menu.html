@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row g-4">
+  {% set modules = [
+    ('Libros', 'Gestión de libros y reporte.', url_for('libro.index')),
+    ('Autores', 'Administrar autores registrados.', url_for('autor.index')),
+    ('Editoriales', 'Gestiona editoriales.', url_for('editorial.index')),
+    ('Géneros', 'Clasificaciones de libros.', url_for('genero.index')),
+    ('Idiomas', 'Idiomas disponibles.', url_for('idioma.index')),
+    ('Préstamos', 'Historial de préstamos activos.', url_for('prestamo.index')),
+    ('Usuarios', 'Administración de usuarios.', url_for('usuario.index')),
+    ('Grupo Lectura', 'Organiza clubes de lectura.', url_for('grupo_lectura.index')),
+    ('Historial', 'Módulo en construcción.', url_for('historial.index')),
+    ('LibroEdit', 'Módulo en construcción.', url_for('libroedit.index')),
+    ('Miembro', 'Módulo en construcción.', url_for('miembro.index')),
+    ('Ubicación', 'Módulo en construcción.', url_for('ubicacion.index'))
+  ] %}
+  {% for title, description, link in modules %}
+    <div class="col-md-4">
+      <div class="card card-module shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ title }}</h5>
+          <p class="card-text">{{ description }}</p>
+          <a href="{{ link }}" class="btn btn-primary">Ir al módulo</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
