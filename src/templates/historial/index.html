@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Historial de movimientos</h1>
+  <a href="{{ url_for('historial.crear') }}" class="btn btn-primary">Nuevo movimiento</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Acción</th>
+        <th>Fecha</th>
+        <th>Usuario</th>
+        <th>Libro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for registro in registros %}
+        <tr>
+          <td>{{ registro['ID_HISTORIAL'] }}</td>
+          <td>{{ registro['ACCION'] }}</td>
+          <td>{{ registro.get('FECHA_EVENTO')|date10 }}</td>
+          <td>{{ registro.get('USUARIO_ID_USUARIO') }}</td>
+          <td>{{ registro.get('LIBRO_ID_LIBRO') }}</td>
+          <td>
+            <a href="{{ url_for('historial.editar', id_historial=registro['ID_HISTORIAL']) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <form action="{{ url_for('historial.eliminar', id_historial=registro['ID_HISTORIAL']) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar movimiento?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center">No hay registros.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<nav>
+  <ul class="pagination">
+    {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('historial.index', page=p) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endblock %}

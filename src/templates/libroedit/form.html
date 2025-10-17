@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Editar relación' if registro else 'Nueva relación' }}</h1>
+<form method="post" action="{{ action }}" class="row g-3">
+  <div class="col-md-4">
+    <label class="form-label" for="editorial">Editorial</label>
+    <select class="form-select" id="editorial" name="ID_VAREDIT" required>
+      <option value="">-- Selecciona --</option>
+      {% for editorial in editoriales %}
+        <option value="{{ editorial['ID_VAREDIT'] }}" {% if registro and registro['ID_VAREDIT'] == editorial['ID_VAREDIT'] %}selected{% endif %}>{{ editorial['ID_VAREDIT'] }} - {{ editorial['NOMBRE'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="libro">Libro</label>
+    <select class="form-select" id="libro" name="LIBRO_ID_LIBRO" required>
+      <option value="">-- Selecciona --</option>
+      {% for libro in libros %}
+        <option value="{{ libro['ID_LIBRO'] }}" {% if registro and registro['LIBRO_ID_LIBRO'] == libro['ID_LIBRO'] %}selected{% endif %}>{{ libro['ID_LIBRO'] }} - {{ libro['TITULO'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="fecha_edicion">Fecha de edición</label>
+    <input type="date" class="form-control" id="fecha_edicion" name="FECHA_EDICION" value="{{ registro.get('FECHA_EDICION')|date10 if registro else '' }}">
+  </div>
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('libroedit.index') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
+{% endblock %}
